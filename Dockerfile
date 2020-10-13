@@ -8,7 +8,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Build a release artifact.
-RUN mvn package -DskipTests
+RUN mvn package -DskipTests -B
 
 # Use AdoptOpenJDK for base image.
 # It's important to use OpenJDK 8u191 or above that has container support enabled.
@@ -20,4 +20,5 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 COPY --from=builder /app/target/randomstrings*.jar /randomstrings.jar
 
 # Run the web service on container startup.
+EXPOSE 9080
 CMD ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/randomstrings.jar"]
